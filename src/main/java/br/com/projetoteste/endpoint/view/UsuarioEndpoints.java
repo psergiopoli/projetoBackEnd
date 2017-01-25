@@ -2,6 +2,8 @@ package br.com.projetoteste.endpoint.view;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +26,11 @@ public class UsuarioEndpoints {
     }
     
     @RequestMapping(value = "/usuario/{usuarioId}",method = RequestMethod.GET)
-    public Usuario list(@PathVariable Integer usuarioId) {
-        return usuarioDao.findById(usuarioId);
+    public Usuario list(@PathVariable Integer usuarioId,HttpServletResponse response) {
+    	Usuario usuario = usuarioDao.findById(usuarioId);
+        if(usuario==null)
+        	response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+    	return usuario;
     }
     
     @RequestMapping(value = "/usuario",method = RequestMethod.POST)
